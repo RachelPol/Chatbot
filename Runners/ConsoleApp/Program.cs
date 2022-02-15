@@ -17,6 +17,7 @@ namespace ConsoleApp
         {
             var pluginExecutor = new PluginExecutor(new MemoryDal(), new PluginsMenu(), new PluginsManager());
 
+
             while (true)
             {
                 var msg = Console.ReadLine();
