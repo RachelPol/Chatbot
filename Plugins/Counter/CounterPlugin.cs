@@ -8,12 +8,23 @@ namespace Counter
     {
         public static string _Id => "counter";
         public string Id => _Id;
-
+        static int c = 1;
         public PluginOutput Execute(PluginInput input)
         {
-            var lastCount = int.Parse(input.PersistentData);
-            var result = (lastCount + 1).ToString();
-            return new PluginOutput(result, result);
+           
+            if (input.Message == "")
+            {
+                input.Callbacks.StartSession();
+                //input.Message = "1";
+                input.Callbacks.EndSession();
+                return new PluginOutput($"Count number:{c++}", input.PersistentData);
+            }
+            else
+            {
+                var lastCount = int.Parse(input.PersistentData);
+                var result = (lastCount + 1).ToString();
+                return new PluginOutput(result, result);
+            }
         }
     }
 }
