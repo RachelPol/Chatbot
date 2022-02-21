@@ -49,7 +49,7 @@ namespace ListPlugin
                 list.RemoveAt(list.Count - 1);
                 var data = new PersistentDataStructure(list);
 
-                return new PluginOutput($"Delete last task");
+                return new PluginOutput($"Delete last task", JsonSerializer.Serialize(data));
             }
             else if (s == "list")
             {
