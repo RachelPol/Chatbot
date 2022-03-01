@@ -17,6 +17,7 @@ namespace ListPlugin
 
         public PluginOutput Execute(PluginInput input)
         {
+            List<string> list = new();
 
             if (string.IsNullOrEmpty(input.PersistentData) == false)
             {
