@@ -19,7 +19,7 @@ namespace Infrastructure
         public IPlugin CreatePlugin(string id)
         {
             if (id == CountDownPlugin._Id)
-            { 
+            {
                 return new CountDownPlugin(new Scheduler(this));
             }
             else if (id == DiceRollerPlugin._Id)

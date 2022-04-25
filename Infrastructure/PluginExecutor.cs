@@ -17,7 +17,6 @@ namespace Infrastructure
 
     public class PluginExecutor
     {
-        
         const string SESSION_PLUGIN_ID = "SESSION_PLUGIN_ID";
 
         private readonly IDal _dal;
@@ -46,11 +45,11 @@ namespace Infrastructure
                 var pluginType = ExtractPluginType(pluginNumber); 
 
                 return Execute(pluginType, extraData, user);
-           }
-           else
-           {
-               return Execute(currentPluginId, message, user);
-           }
+            }
+            else
+            {
+                return Execute(currentPluginId, message, user);
+            }
         }
 
         private string ExtractPluginType(int pluginNumber)
