@@ -15,9 +15,19 @@ namespace CountDown
         public static string _Id = "count-down";
         public string Id => _Id;
 
-        public PluginOutput Execute(PluginInput input)
+        public  PluginOutput Execute(PluginInput input)
         {
-            var interval = int.Parse(input.Message);
+           int interval;
+            if (string.IsNullOrWhiteSpace(input.Message) || !int.TryParse(input.Message, out interval))
+            {
+                Console.WriteLine("Please enter a valid number for the countdown interval:");
+
+                // ממתין לקבלת קלט עד שהוא יהיה חוקי
+                while (!int.TryParse(Console.ReadLine(), out interval))
+                {
+                    Console.WriteLine("Invalid input. Please enter a valid number:");
+                }
+            }
             _scheduler.Schedule(TimeSpan.FromSeconds(interval), Id, "");
             return new PluginOutput("Countdown started.");
 
