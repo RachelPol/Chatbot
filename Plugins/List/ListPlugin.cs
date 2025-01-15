@@ -45,12 +45,14 @@ namespace ListPlugin
             }
             else if (input.Message.StartsWith("delete"))
             {   
-                list.RemoveAt(list.Count - 1);
+               var x=input.Message.Substring("delete".Length).Trim();
+               list= list.Where(e=>e!=x).ToList();
+
                 var data = new PersistentDataStructure(list);
 
-                return new PluginOutput($"Delete last task");
+                return new PluginOutput($"Delete last task: {x}",JsonSerializer.Serialize(data));
             }
-            else if (input.Message == "list")
+            else if (input.Message.ToLower() == "list")
             {
                 string listtasks = string.Join("\r\n", list);
                 return new PluginOutput($"All list tasks:\r\n{listtasks}", input.PersistentData);
