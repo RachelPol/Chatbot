@@ -45,16 +45,52 @@ namespace ListPlugin
 
            return new PluginOutput($"New task: {str}", JsonSerializer.Serialize(data));
             }
+            //else if (s.StartsWith("delete"))
+            //{
+            //    if (list.Count > 0) 
+            //    {
+            //        int index;
+            //        var str = input.Message.Substring("delete".Length).Trim();
+            //        bool x = int.TryParse(str, out index);
+            //        if (x)
+            //        { 
+            //        }
+            //        temp = list.ToList(); 
+            //        temp.RemoveAt(int.Parse(str)); 
+            //        list = temp; 
+            //        var data = new PersistentDataStructure(list);
+
+            //        return new PluginOutput($"Deleted last task", JsonSerializer.Serialize(data));
+            //    }
+            //    else
+            //    {
+            //        return new PluginOutput("The list is empty. No tasks to delete.", input.PersistentData);
+            //    }
+            //}
+
             else if (s.StartsWith("delete"))
             {
-                if (list.Count > 0) 
+                if (list.Count > 0)
                 {
-                    temp = list.ToList(); 
-                    temp.RemoveAt(temp.Count - 1); 
-                    list = temp; 
-                    var data = new PersistentDataStructure(list);
-
-                    return new PluginOutput($"Deleted last task", JsonSerializer.Serialize(data));
+                    var str = input.Message.Substring("delete".Length).Trim();
+                    bool x = int.TryParse(str, out int index);
+                    if (x)
+                    { 
+                        if (index >= 0 && index < list.Count-1)
+                        {
+                            list.RemoveAt(index); // מחק את האיבר לפי האינדקס
+                            var data = new PersistentDataStructure(list);
+                            return new PluginOutput($"Deleted task at index {index}: {list[index]}", JsonSerializer.Serialize(data));
+                        }
+                        else
+                        {
+                            return new PluginOutput("Error! The index is out of range. Please provide a valid index.", input.PersistentData);
+                        }
+                    }
+                    else
+                    {
+                        return new PluginOutput("Error! Please enter a valid number for the index to delete.", input.PersistentData);
+                    }
                 }
                 else
                 {
@@ -62,13 +98,6 @@ namespace ListPlugin
                 }
             }
 
-            //else if (s.StartsWith("delete"))
-            //{   
-            //    list.RemoveAt(list.Count - 1);
-            //    var data = new PersistentDataStructure(list);
-
-            //    return new PluginOutput($"Delete last task");
-            //}
             else if (s == "list" )
             {
                 string listtasks = string.Join("\r\n", list);
