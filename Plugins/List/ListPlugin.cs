@@ -18,6 +18,7 @@ namespace ListPlugin
         public PluginOutput Execute(PluginInput input)
         {
             List<string> list = new();
+            List<string> temp = new();
             string s = input.Message;
             s= s.ToLower();
             if (string.IsNullOrEmpty(input.PersistentData) == false)
@@ -39,18 +40,35 @@ namespace ListPlugin
             {
                 var str = input.Message.Substring("add".Length).Trim();
                 list.Add(str);
+                
+           var data = new PersistentDataStructure(list);
 
-                var data = new PersistentDataStructure(list);
-
-                return new PluginOutput($"New task: {str}", JsonSerializer.Serialize(data));
+           return new PluginOutput($"New task: {str}", JsonSerializer.Serialize(data));
             }
-            else if (input.Message.StartsWith("delete") || input.Message.StartsWith("DELETE"))
-            {   
-                list.RemoveAt(list.Count - 1);
-                var data = new PersistentDataStructure(list);
+            else if (s.StartsWith("delete"))
+            {
+                if (list.Count > 0) 
+                {
+                    temp = list.ToList(); 
+                    temp.RemoveAt(temp.Count - 1); 
+                    list = temp; 
+                    var data = new PersistentDataStructure(list);
 
-                return new PluginOutput($"Delete last task");
+                    return new PluginOutput($"Deleted last task", JsonSerializer.Serialize(data));
+                }
+                else
+                {
+                    return new PluginOutput("The list is empty. No tasks to delete.", input.PersistentData);
+                }
             }
+
+            //else if (s.StartsWith("delete"))
+            //{   
+            //    list.RemoveAt(list.Count - 1);
+            //    var data = new PersistentDataStructure(list);
+
+            //    return new PluginOutput($"Delete last task");
+            //}
             else if (s == "list" )
             {
                 string listtasks = string.Join("\r\n", list);
