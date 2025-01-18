@@ -17,7 +17,17 @@ namespace CountDown
 
         public PluginOutput Execute(PluginInput input)
         {
-            var interval = int.Parse(input.Message);
+            int interval;
+            if (int.TryParse(input.Message, out  interval))
+            {
+                // ההמרה הצליחה, ערך interval מוגדר
+            }
+            else
+            {
+                // ההמרה נכשלה, אפשר להגדיר ערך ברירת מחדל
+                interval = 0;
+            }
+
             _scheduler.Schedule(TimeSpan.FromSeconds(interval), Id, "");
             return new PluginOutput("Countdown started.");
 
