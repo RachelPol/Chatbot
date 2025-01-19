@@ -43,7 +43,7 @@ namespace ListPlugin
 
                 return new PluginOutput($"New task: {str}", JsonSerializer.Serialize(data));
             }
-            else if (input.Message.StartsWith("delete"))
+            else if (input.Message.ToLower().StartsWith("delete"))
             {
                 var x = input.Message.Substring("delete".Length).Trim();
                 list = list.Where(e => e != x).ToList();
