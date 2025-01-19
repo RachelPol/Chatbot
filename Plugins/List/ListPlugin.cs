@@ -34,9 +34,9 @@ namespace ListPlugin
                 input.Callbacks.EndSession();
                 return new PluginOutput("List stopped.", input.PersistentData);
             }
-            else if (input.Message.StartsWith("add"))
+            else if (input.Message.ToLower().StartsWith("add"))
             {
-                var str = input.Message.Substring("add".Length).Trim();
+                var str = input.Message.Substring("add".Length).ToLower().Trim();
                 list.Add(str);
 
                 var data = new PersistentDataStructure(list);
@@ -44,12 +44,30 @@ namespace ListPlugin
                 return new PluginOutput($"New task: {str}", JsonSerializer.Serialize(data));
             }
             else if (input.Message.StartsWith("delete"))
-            {   
-                list.RemoveAt(list.Count - 1);
-                var data = new PersistentDataStructure(list);
+            {
+                if (list.Count > 0)
+                {   list.RemoveAt(list.Count - 1);
+                    var data = new PersistentDataStructure(list);
 
-                return new PluginOutput($"Delete last task");
+                }return new PluginOutput($"Delete last task");
+            
             }
+            else if (input.Message.StartsWith("delete one"))
+            {
+                string taskToDelete = input.Message.Substring("delete one".Length).Trim();
+                if (list.Contains(taskToDelete))
+                {
+                    list.Remove(taskToDelete); // מסיר את המשימה מהרשימה
+                    var data = new PersistentDataStructure(list);
+                }
+                else
+                {
+                    return new PluginOutput($"Task '{taskToDelete}' not found");
+                }
+                return new PluginOutput($"Delete last task");
+
+            }
+
             else if (input.Message == "list")
             {
                 string listtasks = string.Join("\r\n", list);
