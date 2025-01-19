@@ -17,8 +17,7 @@ namespace ListPlugin
 
         public PluginOutput Execute(PluginInput input)
         {
-            List<string> list = new();
-
+           List<string> list=new();
             if (string.IsNullOrEmpty(input.PersistentData) == false)
             {
                 list = JsonSerializer.Deserialize<PersistentDataStructure>(input.PersistentData).List;
@@ -44,11 +43,21 @@ namespace ListPlugin
                 return new PluginOutput($"New task: {str}", JsonSerializer.Serialize(data));
             }
             else if (input.Message.StartsWith("delete"))
-            {   
-                list.RemoveAt(list.Count - 1);
-                var data = new PersistentDataStructure(list);
+            {
+                var str = input.Message.Substring("delete".Length).Trim();
+                if(str!="")
+                { 
+                 list.Remove(str);
+                    Console.WriteLine($"Delete task:"+ str);
+                }
 
-                return new PluginOutput($"Delete last task");
+                else {
+                list.RemoveAt(list.Count - 1);
+                Console.WriteLine($"Delete last task");
+                 }
+                var data = new PersistentDataStructure(list);
+                return new PluginOutput($"", JsonSerializer.Serialize(data));
+
             }
             else if (input.Message == "list")
             {
