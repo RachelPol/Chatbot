@@ -19,6 +19,7 @@ namespace ListPlugin
         {
            
             List<string> list = new();
+
             if (!string.IsNullOrEmpty(input.PersistentData))
             {
                 try
