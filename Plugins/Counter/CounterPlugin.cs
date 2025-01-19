@@ -11,9 +11,34 @@ namespace Counter
 
         public PluginOutput Execute(PluginInput input)
         {
-            var lastCount = int.Parse(input.PersistentData);
-            var result = (lastCount + 1).ToString();
-            return new PluginOutput(result, result);
+            if (input.Message == "")
+            {
+                input.Callbacks.StartSession();
+                return new PluginOutput("Counter started. Enter 'Exit' to stop.");
+            }
+            else if (input.Message.ToLower() == "exit")
+            {
+                input.Callbacks.EndSession();
+                return new PluginOutput("Counter stopped.");
+            }
+            else
+            {
+                try
+                {
+                    var lastCount = int.Parse(input.Message.ToString());
+                    var result = (lastCount + 1).ToString();
+                    return new PluginOutput(result, result);
+
+                } 
+                catch (Exception ex)
+                {
+                    return new PluginOutput("enter Number");
+                }
+                   
+               
+            }
+            
+           
         }
     }
 }
