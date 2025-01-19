@@ -34,7 +34,7 @@ namespace ListPlugin
                 input.Callbacks.EndSession();
                 return new PluginOutput("List stopped.", input.PersistentData);
             }
-            else if (input.Message.StartsWith("add"))
+            else if (input.Message.StartsWith("add", StringComparison.OrdinalIgnoreCase))
             {
                 var str = input.Message.Substring("add".Length).Trim();
                 list.Add(str);
