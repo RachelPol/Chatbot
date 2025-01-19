@@ -15,12 +15,27 @@ namespace CountDown
         public static string _Id = "count-down";
         public string Id => _Id;
 
+
         public PluginOutput Execute(PluginInput input)
         {
-            var interval = int.Parse(input.Message);
-            _scheduler.Schedule(TimeSpan.FromSeconds(interval), Id, "");
-            return new PluginOutput("Countdown started.");
-
+            if (input.Message == "")
+            {
+                _scheduler.Schedule(TimeSpan.FromSeconds(1), Id, "");
+                return new PluginOutput("Countdown started.");
+            }
+            else
+            {
+                try
+                {
+                    var interval = int.Parse(input.Message);
+                    _scheduler.Schedule(TimeSpan.FromSeconds(interval), Id, "");
+                    return new PluginOutput("Countdown started.");
+                }
+                catch (FormatException)
+                {
+                    return new PluginOutput("Countdown failed, string input nust represent vaild seconds.");
+                }
+            }
         }
 
         public void OnScheduler(string data)
