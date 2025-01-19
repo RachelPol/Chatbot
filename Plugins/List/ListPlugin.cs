@@ -17,7 +17,6 @@ namespace ListPlugin
 
         public PluginOutput Execute(PluginInput input)
         {
-           
             List<string> list = new();
 
             if (!string.IsNullOrEmpty(input.PersistentData))
@@ -32,12 +31,11 @@ namespace ListPlugin
                 }
             }
 
-            
             if (string.IsNullOrWhiteSpace(input.Message))
             {
                 input.Callbacks.StartSession();
                 return new PluginOutput(
-                    "List started. Enter 'Add' to add task. Enter 'Delete' to delete task. Enter 'List' to view all tasks. Enter 'Exit' to stop.",
+                    "List started. Enter 'Add' to add task. Enter 'Delete' to delete task. Enter 'Delete [task name]' to delete a specific task. Enter 'List' to view all tasks. Enter 'Exit' to stop.",
                     input.PersistentData);
             }
             else if (input.Message.ToLower() == "exit")
@@ -59,15 +57,33 @@ namespace ListPlugin
             }
             else if (input.Message.ToLower().StartsWith("delete"))
             {
-                if (list.Count == 0)
-                {
-                    return new PluginOutput("there No tasks to delete.", input.PersistentData);
-                }
+                var taskToDelete = input.Message.Substring("delete".Length).Trim();
 
-                string removedTask = list[^1];
-                list.RemoveAt(list.Count - 1);
-                var data = new PersistentDataStructure(list);
-                return new PluginOutput($"Deleted task: {removedTask}", JsonSerializer.Serialize(data));
+                if (string.IsNullOrEmpty(taskToDelete))
+                {
+                    if (list.Count == 0)
+                    {
+                        return new PluginOutput("There are no tasks to delete.", input.PersistentData);
+                    }
+
+                    string removedTask = list[^1];
+                    list.RemoveAt(list.Count - 1);
+                    var data = new PersistentDataStructure(list);
+                    return new PluginOutput($"Deleted last task: {removedTask}", JsonSerializer.Serialize(data));
+                }
+                else
+                {
+                    if (list.Contains(taskToDelete))
+                    {
+                        list.Remove(taskToDelete);
+                        var data = new PersistentDataStructure(list);
+                        return new PluginOutput($"Deleted task: {taskToDelete}", JsonSerializer.Serialize(data));
+                    }
+                    else
+                    {
+                        return new PluginOutput($"Task '{taskToDelete}' not found.", input.PersistentData);
+                    }
+                }
             }
             else if (input.Message.ToLower() == "list")
             {
@@ -81,7 +97,7 @@ namespace ListPlugin
             }
             else
             {
-                return new PluginOutput(" Invalid command. Use 'Add', 'Delete', 'List', or 'Exit'.", input.PersistentData);
+                return new PluginOutput("Invalid command. Use 'Add', 'Delete', 'List', or 'Exit'.", input.PersistentData);
             }
         }
     }
