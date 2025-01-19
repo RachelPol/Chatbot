@@ -21,6 +21,7 @@ namespace CountDown
             {
                 return new PluginOutput("Input cannot be empty.");
             }
+
             if (int.TryParse(input.Message, out interval))
             {
                 _scheduler.Schedule(TimeSpan.FromSeconds(interval), Id, "");
