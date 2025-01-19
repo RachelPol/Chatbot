@@ -2,7 +2,6 @@
 using BasePlugin.Interfaces;
 using BasePlugin.Records;
 using System;
-using System.Collections.Generic;
 
 namespace CountDown
 {
@@ -17,10 +16,20 @@ namespace CountDown
 
         public PluginOutput Execute(PluginInput input)
         {
-            var interval = int.Parse(input.Message);
-            _scheduler.Schedule(TimeSpan.FromSeconds(interval), Id, "");
-            return new PluginOutput("Countdown started.");
-
+            int interval;
+            if (string.IsNullOrWhiteSpace(input.Message))
+            {
+                return new PluginOutput("Input cannot be empty.");
+            }
+            if (int.TryParse(input.Message, out interval))
+            {
+                _scheduler.Schedule(TimeSpan.FromSeconds(interval), Id, "");
+                return new PluginOutput("Countdown started.");
+            }
+            else
+            {
+                return new PluginOutput("The provided input is not a valid integer.");
+            }
         }
 
         public void OnScheduler(string data)
