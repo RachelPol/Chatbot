@@ -18,14 +18,6 @@ namespace ListPlugin
         public PluginOutput Execute(PluginInput input)
         {
            List<string> list=new();
-           //int count =0;
-           //if (count == 0)
-           //{
-           //    list= new();
-           //    count = 1;
-           //}
-           
-
             if (string.IsNullOrEmpty(input.PersistentData) == false)
             {
                 list = JsonSerializer.Deserialize<PersistentDataStructure>(input.PersistentData).List;
