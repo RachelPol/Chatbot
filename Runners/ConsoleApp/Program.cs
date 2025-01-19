@@ -20,6 +20,7 @@ namespace ConsoleApp
             while (true)
             {
                 var msg = Console.ReadLine();
+                
                 var res = pluginExecutor.Run(msg, "");
                 Console.WriteLine(res);
             }

@@ -56,7 +56,7 @@ namespace Infrastructure
             }
         }
 
-        static public readonly IReadOnlyList<string> plugins = new List<string>
+        private static readonly IReadOnlyList<string> plugins = new List<string>
         {
             DiceRollerPlugin._Id,
             CountDownPlugin._Id,
@@ -66,5 +66,7 @@ namespace Infrastructure
             CountTheWordsPlugin._Id,
             CountWordPlugin._Id
         };
+
+        public static IReadOnlyList<string> Plugins => plugins;
     }
 }

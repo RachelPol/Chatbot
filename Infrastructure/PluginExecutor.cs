@@ -54,7 +54,7 @@ namespace Infrastructure
 
         private string ExtractPluginType(int pluginNumber)
         {
-            return PluginsManager.plugins[pluginNumber - 1];
+            return PluginsManager.Plugins[pluginNumber - 1];
         }
 
         private string ExtractExtraData(string message)
@@ -73,9 +73,9 @@ namespace Infrastructure
                 res = "This option is not recognized, please type help to see the options.";
                 return true;
             }
-            if (pluginNumber > PluginsManager.plugins.Count || pluginNumber <= 0)
+            if (pluginNumber > PluginsManager.Plugins.Count || pluginNumber <= 0)
             {
-                res = $"You only allowed to press number between 1 and {PluginsManager.plugins.Count}.";
+                res = $"You only allowed to press number between 1 and {PluginsManager.Plugins.Count}.";
                 return true;
             }
             return false;

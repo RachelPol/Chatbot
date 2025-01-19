@@ -12,6 +12,8 @@ namespace Infrastructure
     {
         PluginsManager _pluginsManager;
 
+
+
         public Scheduler(PluginsManager pluginsManager) => _pluginsManager = pluginsManager;
 
         public void Schedule(TimeSpan ts, string pluginId, string data)
