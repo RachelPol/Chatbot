@@ -34,7 +34,7 @@ namespace ListPlugin
                 input.Callbacks.EndSession();
                 return new PluginOutput("List stopped.", input.PersistentData);
             }
-            else if (input.Message.StartsWith("add"))
+            else if (input.Message.StartsWith("add", StringComparison.OrdinalIgnoreCase))
             {
                 var str = input.Message.Substring("add".Length).Trim();
                 list.Add(str);
@@ -43,14 +43,24 @@ namespace ListPlugin
 
                 return new PluginOutput($"New task: {str}", JsonSerializer.Serialize(data));
             }
-            else if (input.Message.StartsWith("delete"))
-            {   
-                list.RemoveAt(list.Count - 1);
-                var data = new PersistentDataStructure(list);
-
-                return new PluginOutput($"Delete last task");
+            else if (input.Message.StartsWith("delete", StringComparison.OrdinalIgnoreCase))
+            {
+                var taskToDelete = input.Message.Substring("delete".Length).Trim();
+                if (string.IsNullOrEmpty(taskToDelete))
+                { 
+                  string removedTask = list[list.Count - 1];
+                  list.RemoveAt(list.Count - 1);
+                  var data = new PersistentDataStructure(list);
+                  return new PluginOutput($"Deleted last task: {removedTask}", JsonSerializer.Serialize(data));
+                }
+                else
+                {
+                    list.Remove(taskToDelete);
+                    var data = new PersistentDataStructure(list);
+                    return new PluginOutput($"Deleted task: {taskToDelete}", JsonSerializer.Serialize(data));
+                }
             }
-            else if (input.Message == "list")
+            else if (input.Message.StartsWith("list", StringComparison.OrdinalIgnoreCase))
             {
                 string listtasks = string.Join("\r\n", list);
                 return new PluginOutput($"All list tasks:\r\n{listtasks}", input.PersistentData);
